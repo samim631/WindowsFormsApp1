@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="InstrumentDBCONF.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="InstrumentDBCONFStoreContainer">
+    <EntitySet Name="InstrumentSet" EntityType="InstrumentDBCONF.Store.InstrumentSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SignalTypeSet" EntityType="InstrumentDBCONF.Store.SignalTypeSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Measurment" EntityType="InstrumentDBCONF.Store.Measurment" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AnalogRangeSet" EntityType="InstrumentDBCONF.Store.AnalogRangeSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="SignalTypeInstrument" Association="InstrumentDBCONF.Store.SignalTypeInstrument">
+      <End Role="SignalType" EntitySet="SignalTypeSet" />
+      <End Role="Instrument" EntitySet="InstrumentSet" />
+    </AssociationSet>
+    <AssociationSet Name="AnalogRangeInstrument" Association="InstrumentDBCONF.Store.AnalogRangeInstrument">
+      <End Role="AnalogRange" EntitySet="AnalogRangeSet" />
+      <End Role="Instrument" EntitySet="InstrumentSet" />
+    </AssociationSet>
+    <AssociationSet Name="SignalTypeMeasurment_" Association="InstrumentDBCONF.Store.SignalTypeMeasurment_">
+      <End Role="SignalType" EntitySet="SignalTypeSet" />
+      <End Role="Measurment_" EntitySet="Measurment" />
+    </AssociationSet>
+    <AssociationSet Name="Measurment_Instrument" Association="InstrumentDBCONF.Store.Measurment_Instrument">
+      <End Role="Measurment_" EntitySet="Measurment" />
+      <End Role="Instrument" EntitySet="InstrumentSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="InstrumentSet">
+    <Key>
+      <PropertyRef Name="Instrument_Id" />
+    </Key>
+    <Property Name="Instrument_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="InstrumentName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="SerialNo" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Comments" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="RegisterDate" Type="datetime" Nullable="false" />
+    <Property Name="SignalType_SignalType_Id" Type="int" Nullable="false" />
+    <Property Name="AnalogRange_Id" Type="int" Nullable="false" />
+    <Property Name="Measurment__Measurement_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SignalTypeSet">
+    <Key>
+      <PropertyRef Name="SignalType_Id" />
+    </Key>
+    <Property Name="SignalType_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SignalTypeName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Measurment">
+    <Key>
+      <PropertyRef Name="Measurement_Id" />
+    </Key>
+    <Property Name="Measurement_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MeasrumentType" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="SignalType_SignalType_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AnalogRangeSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Lrv" Type="float" Nullable="true" />
+    <Property Name="Urv" Type="float" Nullable="true" />
+    <Property Name="AlramLow" Type="float" Nullable="true" />
+    <Property Name="AlramHigh" Type="float" Nullable="true" />
+    <Property Name="Span" Type="float" StoreGeneratedPattern="Computed" Nullable="true" />
+  </EntityType>
+  <Association Name="SignalTypeInstrument">
+    <End Role="SignalType" Type="InstrumentDBCONF.Store.SignalTypeSet" Multiplicity="1" />
+    <End Role="Instrument" Type="InstrumentDBCONF.Store.InstrumentSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SignalType">
+        <PropertyRef Name="SignalType_Id" />
+      </Principal>
+      <Dependent Role="Instrument">
+        <PropertyRef Name="SignalType_SignalType_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AnalogRangeInstrument">
+    <End Role="AnalogRange" Type="InstrumentDBCONF.Store.AnalogRangeSet" Multiplicity="1" />
+    <End Role="Instrument" Type="InstrumentDBCONF.Store.InstrumentSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AnalogRange">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Instrument">
+        <PropertyRef Name="AnalogRange_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SignalTypeMeasurment_">
+    <End Role="SignalType" Type="InstrumentDBCONF.Store.SignalTypeSet" Multiplicity="1" />
+    <End Role="Measurment_" Type="InstrumentDBCONF.Store.Measurment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SignalType">
+        <PropertyRef Name="SignalType_Id" />
+      </Principal>
+      <Dependent Role="Measurment_">
+        <PropertyRef Name="SignalType_SignalType_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Measurment_Instrument">
+    <End Role="Measurment_" Type="InstrumentDBCONF.Store.Measurment" Multiplicity="1" />
+    <End Role="Instrument" Type="InstrumentDBCONF.Store.InstrumentSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Measurment_">
+        <PropertyRef Name="Measurement_Id" />
+      </Principal>
+      <Dependent Role="Instrument">
+        <PropertyRef Name="Measurment__Measurement_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="InstrumentDBCONF" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="InstrumentDBCONFContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="InstrumentSet" EntityType="InstrumentDBCONF.Instrument" />
+          <EntitySet Name="SignalTypeSet" EntityType="InstrumentDBCONF.SignalType" />
+          <AssociationSet Name="SignalTypeInstrument" Association="InstrumentDBCONF.SignalTypeInstrument">
+            <End Role="SignalType" EntitySet="SignalTypeSet" />
+            <End Role="Instrument" EntitySet="InstrumentSet" />
+          </AssociationSet>
+          <EntitySet Name="Measurment" EntityType="InstrumentDBCONF.Measurment_" />
+          <EntitySet Name="AnalogRangeSet" EntityType="InstrumentDBCONF.AnalogRange" />
+          <AssociationSet Name="AnalogRangeInstrument" Association="InstrumentDBCONF.AnalogRangeInstrument">
+            <End Role="AnalogRange" EntitySet="AnalogRangeSet" />
+            <End Role="Instrument" EntitySet="InstrumentSet" />
+          </AssociationSet>
+          <AssociationSet Name="SignalTypeMeasurment_" Association="InstrumentDBCONF.SignalTypeMeasurment_">
+            <End Role="SignalType" EntitySet="SignalTypeSet" />
+            <End Role="Measurment_" EntitySet="Measurment" />
+          </AssociationSet>
+          <AssociationSet Name="Measurment_Instrument" Association="InstrumentDBCONF.Measurment_Instrument">
+            <End Role="Measurment_" EntitySet="Measurment" />
+            <End Role="Instrument" EntitySet="InstrumentSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Instrument">
+          <Key>
+            <PropertyRef Name="Instrument_Id" />
+          </Key>
+          <Property Name="Instrument_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InstrumentName" Type="String" Nullable="false" />
+          <Property Name="SerialNo" Type="String" Nullable="false" />
+          <Property Name="Comments" Type="String" Nullable="true" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="SignalType" Relationship="InstrumentDBCONF.SignalTypeInstrument" FromRole="Instrument" ToRole="SignalType" />
+          <NavigationProperty Name="AnalogRange" Relationship="InstrumentDBCONF.AnalogRangeInstrument" FromRole="Instrument" ToRole="AnalogRange" />
+          <NavigationProperty Name="Measurment_" Relationship="InstrumentDBCONF.Measurment_Instrument" FromRole="Instrument" ToRole="Measurment_" />
+        </EntityType>
+        <EntityType Name="SignalType">
+          <Key>
+            <PropertyRef Name="SignalType_Id" />
+          </Key>
+          <Property Name="SignalType_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SignalTypeName" Type="String" Nullable="false" />
+          <NavigationProperty Name="Instrument" Relationship="InstrumentDBCONF.SignalTypeInstrument" FromRole="SignalType" ToRole="Instrument" />
+          <NavigationProperty Name="Measurment_" Relationship="InstrumentDBCONF.SignalTypeMeasurment_" FromRole="SignalType" ToRole="Measurment_" />
+        </EntityType>
+        <Association Name="SignalTypeInstrument">
+          <End Type="InstrumentDBCONF.SignalType" Role="SignalType" Multiplicity="1" />
+          <End Type="InstrumentDBCONF.Instrument" Role="Instrument" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Measurment_">
+          <Key>
+            <PropertyRef Name="Measurement_Id" />
+          </Key>
+          <Property Name="Measurement_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MeasrumentType" Type="String" Nullable="false" />
+          <NavigationProperty Name="SignalType" Relationship="InstrumentDBCONF.SignalTypeMeasurment_" FromRole="Measurment_" ToRole="SignalType" />
+          <NavigationProperty Name="Instrument" Relationship="InstrumentDBCONF.Measurment_Instrument" FromRole="Measurment_" ToRole="Instrument" />
+        </EntityType>
+        <EntityType Name="AnalogRange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Lrv" Type="Double" Nullable="true" />
+          <Property Name="Urv" Type="Double" Nullable="true" />
+          <Property Name="AlramLow" Type="Double" Nullable="true" />
+          <Property Name="AlramHigh" Type="Double" Nullable="true" />
+          <Property Name="Span" Type="Double" Nullable="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Instrument" Relationship="InstrumentDBCONF.AnalogRangeInstrument" FromRole="AnalogRange" ToRole="Instrument" />
+        </EntityType>
+        <Association Name="AnalogRangeInstrument">
+          <End Type="InstrumentDBCONF.AnalogRange" Role="AnalogRange" Multiplicity="1" />
+          <End Type="InstrumentDBCONF.Instrument" Role="Instrument" Multiplicity="0..1" />
+        </Association>
+        <Association Name="SignalTypeMeasurment_">
+          <End Type="InstrumentDBCONF.SignalType" Role="SignalType" Multiplicity="1" />
+          <End Type="InstrumentDBCONF.Measurment_" Role="Measurment_" Multiplicity="*" />
+        </Association>
+        <Association Name="Measurment_Instrument">
+          <End Type="InstrumentDBCONF.Measurment_" Role="Measurment_" Multiplicity="1" />
+          <End Type="InstrumentDBCONF.Instrument" Role="Instrument" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="InstrumentDBCONFStoreContainer" CdmEntityContainer="InstrumentDBCONFContainer">
+    <EntitySetMapping Name="InstrumentSet">
+      <EntityTypeMapping TypeName="IsTypeOf(InstrumentDBCONF.Instrument)">
+        <MappingFragment StoreEntitySet="InstrumentSet">
+          <ScalarProperty Name="Instrument_Id" ColumnName="Instrument_Id" />
+          <ScalarProperty Name="InstrumentName" ColumnName="InstrumentName" />
+          <ScalarProperty Name="SerialNo" ColumnName="SerialNo" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SignalTypeSet">
+      <EntityTypeMapping TypeName="IsTypeOf(InstrumentDBCONF.SignalType)">
+        <MappingFragment StoreEntitySet="SignalTypeSet">
+          <ScalarProperty Name="SignalType_Id" ColumnName="SignalType_Id" />
+          <ScalarProperty Name="SignalTypeName" ColumnName="SignalTypeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Measurment">
+      <EntityTypeMapping TypeName="IsTypeOf(InstrumentDBCONF.Measurment_)">
+        <MappingFragment StoreEntitySet="Measurment">
+          <ScalarProperty Name="Measurement_Id" ColumnName="Measurement_Id" />
+          <ScalarProperty Name="MeasrumentType" ColumnName="MeasrumentType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AnalogRangeSet">
+      <EntityTypeMapping TypeName="IsTypeOf(InstrumentDBCONF.AnalogRange)">
+        <MappingFragment StoreEntitySet="AnalogRangeSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Lrv" ColumnName="Lrv" />
+          <ScalarProperty Name="Urv" ColumnName="Urv" />
+          <ScalarProperty Name="AlramLow" ColumnName="AlramLow" />
+          <ScalarProperty Name="AlramHigh" ColumnName="AlramHigh" />
+          <ScalarProperty Name="Span" ColumnName="Span" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="SignalTypeInstrument" TypeName="InstrumentDBCONF.SignalTypeInstrument" StoreEntitySet="InstrumentSet">
+      <EndProperty Name="SignalType">
+        <ScalarProperty Name="SignalType_Id" ColumnName="SignalType_SignalType_Id" />
+      </EndProperty>
+      <EndProperty Name="Instrument">
+        <ScalarProperty Name="Instrument_Id" ColumnName="Instrument_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AnalogRangeInstrument" TypeName="InstrumentDBCONF.AnalogRangeInstrument" StoreEntitySet="InstrumentSet">
+      <EndProperty Name="AnalogRange">
+        <ScalarProperty Name="Id" ColumnName="AnalogRange_Id" />
+      </EndProperty>
+      <EndProperty Name="Instrument">
+        <ScalarProperty Name="Instrument_Id" ColumnName="Instrument_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SignalTypeMeasurment_" TypeName="InstrumentDBCONF.SignalTypeMeasurment_" StoreEntitySet="Measurment">
+      <EndProperty Name="SignalType">
+        <ScalarProperty Name="SignalType_Id" ColumnName="SignalType_SignalType_Id" />
+      </EndProperty>
+      <EndProperty Name="Measurment_">
+        <ScalarProperty Name="Measurement_Id" ColumnName="Measurement_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="Measurment_Instrument" TypeName="InstrumentDBCONF.Measurment_Instrument" StoreEntitySet="InstrumentSet">
+      <EndProperty Name="Measurment_">
+        <ScalarProperty Name="Measurement_Id" ColumnName="Measurment__Measurement_Id" />
+      </EndProperty>
+      <EndProperty Name="Instrument">
+        <ScalarProperty Name="Instrument_Id" ColumnName="Instrument_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
